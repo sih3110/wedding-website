@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikita & Swadin - Wedding Invitation</title>
+    <meta name="description" content="Join us in celebrating the wedding of Aarav and Priya.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                        pink: '#F8EDEB',
+                        champagne: '#E8D5C4',
+                        lightbg: '#FFFDF8',
+                        darkbg: '#121212',
+                        darkcard: '#1E1E1E',
+                        darktext: '#E0E0E0'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Poppins"', 'sans-serif'],
+                        script: ['"Great Vibes"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- Core Variables --- */
+        :root {
+            --primary-gold: #D4AF37;
+        }
+
+        /* --- Custom Animations --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        
+        /* --- Scroll Reveal Classes --- */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Glassmorphism --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark .glass-panel {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--tw-colors-lightbg); }
+        .dark ::-webkit-scrollbar-track { background: var(--tw-colors-darkbg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-gold); border-radius: 10px; }
+
+        /* --- Specific Layouts --- */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1rem;
+        }
+        @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+        }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* --- Loader --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #FFFDF8;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+        .dark #loader { background: #121212; }
+        
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #D4AF37;
+            animation: spin 1.5s linear infinite;
+        }
+        .loader-ring::before, .loader-ring::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+        .loader-ring::before {
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border-top-color: #E8D5C4;
+            animation: spin 2s linear infinite;
+        }
+        .loader-ring::after {
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border-top-color: #F8EDEB;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Petal Canvas */
+        #petal-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 40;
+            overflow: hidden;
+        }
+        .petal {
+            position: absolute;
+            font-size: 1.5rem;
+            user-select: none;
+            animation: fall linear forwards;
+        }
+    </style>
+</head>
+<body class="bg-lightbg text-gray-800 dark:bg-darkbg dark:text-darktext font-sans antialiased transition-colors duration-500">
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="flex flex-col items-center">
+            <div class="loader-ring relative mb-6"></div>
+            <h2 class="font-script text-4xl text-gold">N & S</h2>
+        </div>
+    </div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 h-1 bg-gold z-50 transition-all duration-150" id="scroll-progress" style="width: 0%;"></div>
+
+    <!-- Floating UI Elements -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
+        <!-- Back to Top -->
+        <button id="btn-top" class="w-12 h-12 bg-gold/80 hover:bg-gold text-white rounded-full flex items-center justify-center shadow-lg backdrop-blur-md transition-all transform scale-0 cursor-pointer">
+            <i class="ph ph-caret-up text-xl"></i>
+        </button>
+       
+    </div>
+
+    <div class="fixed bottom-6 left-6 z-50 flex gap-4">
+        <!-- Music Toggle -->
+        <button id="btn-music" class="w-12 h-12 glass-panel rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-all text-gold">
+            <i class="ph ph-music-notes-simple text-xl"></i>
+        </button>
+        <!-- Dark/Light Mode Toggle -->
+        <button id="btn-theme" class="w-12 h-12 glass-panel rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-all text-gold">
+            <i class="ph ph-moon text-xl dark:hidden"></i>
+            <i class="ph ph-sun text-xl hidden dark:block"></i>
+        </button>
+    </div>
+
+    <!-- Background Audio Element -->
+    <!-- Using an empty/silent tag for safety in previews, replace src with real audio file -->
+    <audio id="bg-music" loop>
+        <source src="malgalashtak.mp3" type="audio/mpeg">
+    </audio>
+    <!-- Floating Petals Container -->
+    <div id="petal-container"></div>
+
+    <!-- 1. HERO SECTION -->
+    <section id="hero" class="relative w-full h-screen flex items-center justify-center overflow-hidden parallax-bg" style="background-image: url('https://i.postimg.cc/RCHHr50s/wedphoto3.jpg');">
+        <!-- Dark overlay for readability -->
+        <div class="absolute inset-0 bg-black/40 dark:bg-black/60 z-0"></div>
+        
+        <div class="relative z-10 text-center px-4 flex flex-col items-center">
+            <p class="font-sans tracking-widest uppercase text-white/80 text-sm md:text-base mb-6 reveal-element">Together with their families</p>
+            
+            <h1 class="font-script text-7xl md:text-9xl text-white drop-shadow-lg mb-6 reveal-element" style="transition-delay: 200ms;">
+                Swadhin & Nikita
+            </h1>
+            
+            <p class="font-serif text-xl md:text-2xl text-white/90 italic mb-10 reveal-element" style="transition-delay: 400ms;">
+                Request the pleasure of your company<br>to celebrate their wedding
+            </p>
+            
+            <div class="glass-panel px-8 py-4 rounded-full mb-12 reveal-element" style="transition-delay: 600ms;">
+                <p class="font-sans font-medium text-gray-800 dark:text-gray-200 tracking-wider">
+                    <i class="ph ph-calendar-heart text-gold mr-2"></i> JUNE 19, 2026
+                </p>
+            </div>
+            
+            <a href="#events" class="bg-gold hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-sans tracking-widest uppercase text-sm transition-all shadow-[0_0_15px_rgba(212,175,55,0.5)] hover:shadow-[0_0_25px_rgba(212,175,55,0.8)] reveal-element" style="transition-delay: 800ms;">
+                Save The Date
+            </a>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center animate-bounce">
+            <span class="text-white/70 text-xs tracking-widest uppercase mb-2">Scroll</span>
+            <div class="w-[1px] h-10 bg-gradient-to-b from-white/70 to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- 2. COUNTDOWN SECTION -->
+    <section class="py-20 relative bg-pink/20 dark:bg-darkbg border-b border-gold/10 overflow-hidden">
+        <div class="container mx-auto px-6 max-w-5xl relative z-10">
+            <div class="text-center mb-12 reveal-element">
+                <h2 class="font-script text-5xl text-gold mb-2">The Big Day</h2>
+                <h3 class="font-serif text-3xl font-semibold">Counting Down the Moments</h3>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center" id="countdown">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+        
+        <!-- Decorative florals -->
+        <div class="absolute -top-10 -left-10 w-40 h-40 bg-[url('https://www.transparenttextures.com/patterns/floral-motif.png')] opacity-10 rounded-full animate-float"></div>
+        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-[url('https://www.transparenttextures.com/patterns/floral-motif.png')] opacity-10 rounded-full animate-float" style="animation-delay: 2s;"></div>
+    </section>
+
+    
+    
+
+    <section id="events" class="py-24 relative overflow-hidden bg-champagne/20 dark:bg-darkbg">
+        <div class="container mx-auto px-6 max-w-4xl"> <div class="text-center mb-16 reveal-element">
+                <h2 class="font-script text-5xl text-gold mb-2">Celebrations</h2>
+                <h3 class="font-serif text-3xl font-semibold">Wedding Events</h3>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                
+                <div class="glass-panel p-10 rounded-2xl text-center flex flex-col items-center justify-center h-full group hover:-translate-y-2 transition-transform duration-300 reveal-element">
+                    <div class="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="ph ph-sun text-3xl text-gold"></i>
+                    </div>
+                    <h4 class="font-serif text-2xl font-semibold mb-2">Haldi</h4>
+                    <p class="text-sm font-sans text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-widest">Jun 19, 2026 | 10:00 AM</p>
+                    <p class="text-gray-600 dark:text-gray-400 font-light mb-6 text-sm">A vibrant morning of traditional turmeric, laughter, and colorful blessings to start the festivities.</p>
+                    <p class="font-serif font-medium text-gold text-sm mt-auto">Naikba Mangal Karyalay, Gothkhindi</p>
+                </div>
+
+                <div class="glass-panel p-10 rounded-2xl text-center flex flex-col items-center justify-center h-full group hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden reveal-element border-gold/50" style="transition-delay: 100ms;">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gold"></div>
+                    <div class="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="ph ph-hands-praying text-3xl text-gold"></i>
+                    </div>
+                    <h4 class="font-serif text-2xl font-semibold mb-2">Wedding</h4>
+                    <p class="text-sm font-sans text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-widest">Jun 19, 2026 | 12:46 PM</p>
+                    <p class="text-gray-600 dark:text-gray-400 font-light mb-6 text-sm">The sacred ceremony where two souls become one forever. Join us as we take our vows.</p>
+                    <p class="font-serif font-medium text-gold text-sm mt-auto">Naikba Mangal Karyalay, Gothkhindi</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. GALLERY SECTION -->
+    <section class="py-24 bg-lightbg dark:bg-[#181818]">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-script text-5xl text-gold mb-2">Memories</h2>
+                <h3 class="font-serif text-3xl font-semibold">Captured Moments</h3>
+            </div>
+
+            <!-- Masonry Grid -->
+            <div class="masonry-grid reveal-element">
+                <div class="masonry-item group cursor-pointer" onclick="openLightbox(this)">
+                    <img src="wedphoto.jpeg" alt="Pre-wedding 1" class="w-full rounded-xl transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                        <i class="ph ph-magnifying-glass-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+                <div class="masonry-item group cursor-pointer" onclick="openLightbox(this)">
+                    <img src="wedphoto2.jpeg" alt="Pre-wedding 2" class="w-full rounded-xl transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                        <i class="ph ph-magnifying-glass-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+                <div class="masonry-item group cursor-pointer" onclick="openLightbox(this)">
+                    <img src="wedphoto3.jpeg" alt="Pre-wedding 3" class="w-full rounded-xl transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                        <i class="ph ph-magnifying-glass-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+                <div class="masonry-item group cursor-pointer" onclick="openLightbox(this)">
+                    <img src="wedphoto4.jpeg" alt="Pre-wedding 4" class="w-full rounded-xl transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                        <i class="ph ph-magnifying-glass-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+                <div class="masonry-item group cursor-pointer" onclick="openLightbox(this)">
+                    <img src="wedphoto5.jpeg" alt="Pre-wedding 5" class="w-full rounded-xl transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                        <i class="ph ph-magnifying-glass-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+                <div class="masonry-item group cursor-pointer" onclick="openLightbox(this)">
+                    <img src="wephoto6.jpeg" alt="Pre-wedding 6" class="w-full rounded-xl transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                        <i class="ph ph-magnifying-glass-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white hover:text-gold transition-colors">
+            <i class="ph ph-x text-4xl"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Enlarged" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300">
+    </div>
+
+    <!-- 6. VENUE SECTION -->
+    <section class="py-24 bg-pink/10 dark:bg-[#121212]">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="flex flex-col lg:flex-row gap-12 items-center bg-white dark:bg-darkcard rounded-3xl overflow-hidden shadow-2xl reveal-element border border-gold/10">
+                <!-- Map -->
+                <div class="w-full lg:w-1/2 h-96 lg:h-auto min-h-[400px]">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3627.6109900144006!2d74.32642717492435!3d16.952621283862314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc10f005b3731c9%3A0xd5df296fbe82630f!2sNaikba%20Mangal%20karyalay%20gothkhindi!5e1!3m2!1sen!2sin!4v1781513460140!5m2!1sen!2sin" 
+                    class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                    <h4 class="font-semibold text-gray-800 dark:text-white text-lg">Naikba Mangal Karyalay</h4>
+                    <p class="leading-relaxed text-sm">Gothkhindi,Tal-Sangli<br>Maharashtra, 416301</p>
+                    <div class="pt-6">
+                        <a href="">
+                        <i class="ph ph-navigation-arrow"></i> Get Directions
+                        </a>
+                    </div>
+                </div>
+
+                
+                
+                <!-- Details -->
+                <div class="w-full lg:w-1/2 p-10 lg:p-16 text-center lg:text-left">
+                    <h2 class="font-script text-4xl text-gold mb-2">Getting There</h2>
+                    <h3 class="font-serif text-3xl font-semibold mb-6">Venue Details</h3>
+                    
+                    <div class="space-y-6 font-sans text-gray-600 dark:text-gray-300">
+                        <div class="flex items-start gap-4 justify-center lg:justify-start">
+                            <i class="ph ph-map-pin text-2xl text-gold mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 dark:text-white text-lg">Naikba Mangal Karyalay, Gothkhindi</h4>
+                                <p class="leading-relaxed text-sm">Sangli, Maharashtra 416301</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 justify-center lg:justify-start">
+                            <i class="ph ph-phone text-2xl text-gold"></i>
+                            <p class="text-sm">+91 98765 43210</p>
+                        </div>
+                        
+                        <div class="pt-6">
+                            <a href="https://maps.google.com" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-gold hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-sans tracking-widest uppercase text-sm transition-all shadow-lg hover:shadow-gold/50">
+                                <i class="ph ph-navigation-arrow"></i> Get Directions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    
+    <!-- 9. FAMILY MEMBERS SECTION -->
+    <section class="py-24 bg-champagne/10 dark:bg-darkbg border-t border-gold/10">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-script text-5xl text-gold mb-2">Family</h2>
+                <h3 class="font-serif text-3xl font-semibold">With Blessings From</h3>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 text-center">
+                <!-- Groom's Family -->
+                <div class="reveal-element">
+                    <h4 class="font-serif text-2xl font-semibold mb-6 text-gold border-b border-gold/20 pb-4 mx-12">The Groom's Family</h4>
+                    <ul class="space-y-4 font-sans text-gray-700 dark:text-gray-300">
+                        <li>Mr. Prakash & Mrs.  yadav (Parents)</li>
+                        <li>living in A/p-bavachi, Tal-Walwa, Dist-Sangli</li>
+                        <li>there Son, with love</li>
+                    </ul>
+                </div>
+
+                <!-- Bride's Family -->
+                <div class="reveal-element" style="transition-delay: 200ms;">
+                    <h4 class="font-serif text-2xl font-semibold mb-6 text-gold border-b border-gold/20 pb-4 mx-12">The Bride's Family</h4>
+                    <ul class="space-y-4 font-sans text-gray-700 dark:text-gray-300">
+                        <li>Mr. Hanmant & Mrs. Alka patil (Parents)</li>
+                        <li>living in A/p-Kale, Tal-Karad, Dist-Satara</li>
+                        <li>there daughter, with love</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center reveal-element">
+                 <p class="font-sans text-sm text-gray-500 italic">And all our extended families & friends.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. FOOTER -->
+    <footer class="bg-black py-16 text-center border-t border-gold/30">
+        <div class="container mx-auto px-6">
+            <h2 class="font-script text-6xl text-gold mb-4">S & N</h2>
+            <p class="font-serif text-white/80 text-xl italic mb-8">Thank you for being part of our story.</p>
+            
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="#" class="w-10 h-10 rounded-full border border-gold/50 text-gold flex items-center justify-center hover:bg-gold hover:text-white transition-all">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-gold/50 text-gold flex items-center justify-center hover:bg-gold hover:text-white transition-all">
+                    <i class="ph ph-facebook-logo text-xl"></i>
+                </a>
+            </div>
+            
+            <p class="font-sans text-white/40 text-xs tracking-widest uppercase">
+                &copy; 2026 SHUBHAM PATIL. Made with <i class="ph-fill ph-heart text-gold mx-1"></i> Love.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Loader ---
+            const loader = document.getElementById('loader');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => { loader.style.display = 'none'; }, 800);
+                }, 1000);
+            });
+
+            // --- 2. Scroll Reveal & Scroll Progress ---
+            const revealElements = document.querySelectorAll('.reveal-element');
+            const scrollProgress = document.getElementById('scroll-progress');
+            const btnTop = document.getElementById('btn-top');
+
+            const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+            const revealObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            window.addEventListener('scroll', () => {
+                // Progress bar
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                scrollProgress.style.width = scrolled + "%";
+
+                // Back to Top Button
+                if (winScroll > 500) {
+                    btnTop.classList.remove('scale-0');
+                    btnTop.classList.add('scale-100');
+                } else {
+                    btnTop.classList.remove('scale-100');
+                    btnTop.classList.add('scale-0');
+                }
+            });
+
+            btnTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // --- 3. Countdown Timer ---
+            // Set the exact date: Year-Month-Day T Hours:Minutes:Seconds
+            // Format for June 19, 2026 at 12:46 PM
+            const targetDate = new Date("2026-06-19T12:46:00").getTime();
+            
+            const countdownEl = document.getElementById('countdown');
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    countdownEl.innerHTML = '<div class="col-span-4 text-2xl font-serif text-gold">The wait is over!</div>';
+                    return;
+                }
+
+                // The exact calculation logic from your image
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const timeBlocks = [
+                    { label: 'Days', value: days },
+                    { label: 'Hours', value: hours },
+                    { label: 'Minutes', value: minutes },
+                    { label: 'Seconds', value: seconds }
+                ];
+
+                countdownEl.innerHTML = timeBlocks.map(block => `
+                    <div class="glass-panel p-4 md:p-6 rounded-2xl flex flex-col items-center justify-center transform hover:scale-105 transition-transform">
+                        <span class="font-serif text-3xl md:text-5xl text-gold font-bold mb-1">${block.value}</span>
+                        <span class="font-sans text-xs md:text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400">${block.label}</span>
+                    </div>
+                `).join('');
+            }
+            
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+
+            // --- 4. Dark/Light Mode Toggle ---
+            const btnTheme = document.getElementById('btn-theme');
+            const htmlClassList = document.documentElement.classList;
+            
+            // Check system preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                htmlClassList.add('dark');
+            }
+
+            btnTheme.addEventListener('click', () => {
+                htmlClassList.toggle('dark');
+            });
+
+            // --- 5. Music Toggle ---
+            const btnMusic = document.getElementById('btn-music');
+            const audio = document.getElementById('bg-music');
+            const musicIcon = btnMusic.querySelector('i');
+            let isPlaying = false;
+
+            btnMusic.addEventListener('click', () => {
+                if (isPlaying) {
+                    audio.pause();
+                    musicIcon.classList.remove('ph-music-notes-simple');
+                    musicIcon.classList.add('ph-music-notes-slash');
+                } else {
+                    // Handle promise rejection if audio lacks src or is blocked
+                    audio.play().catch(e => console.log("Audio play prevented or missing source.", e));
+                    musicIcon.classList.remove('ph-music-notes-slash');
+                    musicIcon.classList.add('ph-music-notes-simple');
+                }
+                isPlaying = !isPlaying;
+                btnMusic.classList.toggle('animate-pulse', isPlaying);
+            });
+
+            // --- 6. Floating Petals Animation ---
+            const petalContainer = document.getElementById('petal-container');
+            const emojis = ['🌸', '💮', '✨']; // Soft petals and sparkles
+
+            function createPetal() {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                petal.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Random properties
+                petal.style.left = Math.random() * 100 + 'vw';
+                const duration = Math.random() * 5 + 5; // 5-10s
+                petal.style.animationDuration = duration + 's';
+                petal.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
+                petal.style.opacity = Math.random() * 0.5 + 0.3;
+                
+                petalContainer.appendChild(petal);
+                
+                // Remove after animation completes
+                setTimeout(() => {
+                    petal.remove();
+                }, duration * 1000);
+            }
+
+            // Generate petals periodically
+            setInterval(createPetal, 400);
+        });
+
+        // --- 7. Lightbox Gallery ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        window.openLightbox = function(elem) {
+            const imgSrc = elem.querySelector('img').src;
+            lightboxImg.src = imgSrc;
+            lightbox.classList.remove('hidden');
+            // Small delay to allow display:flex to apply before changing opacity for transition
+            setTimeout(() => {
+                lightbox.classList.remove('opacity-0');
+                lightboxImg.classList.remove('scale-95');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        };
+
+        window.closeLightbox = function() {
+            lightbox.classList.add('opacity-0');
+            lightboxImg.classList.add('scale-95');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                lightboxImg.src = '';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        };
+
+        // Close on background click
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // --- 8. RSVP Form & Confetti ---
+        window.handleRSVP = function(e) {
+            e.preventDefault();
+            const form = document.getElementById('rsvp-form');
+            const successMsg = document.getElementById('rsvp-success');
+            
+            // Hide form, show success
+            form.style.display = 'none';
+            successMsg.classList.remove('hidden');
+            successMsg.classList.add('animate-reveal');
+            
+            // Fire Confetti
+            fireConfetti();
+        };
+
+        function fireConfetti() {
+            const colors = ['#D4AF37', '#F8EDEB', '#E8D5C4', '#FFFFFF'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.zIndex = '9999';
+                
+                // Random physics
+                const fallDuration = Math.random() * 3 + 2;
+                const spinDuration = Math.random() * 2 + 1;
+                const swayAmt = Math.random() * 100 - 50;
+                
+                confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${swayAmt}px, 100vh, 0) rotate(${360 * spinDuration}deg)`, opacity: 0 }
+                ], {
+                    duration: fallDuration * 1000,
+                    easing: 'cubic-bezier(.37,0,.63,1)',
+                    fill: 'forwards'
+                });
+                
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), fallDuration * 1000);
+            }
+        }
+    </script>
+</body>
+</html>
